@@ -4,6 +4,8 @@ import requests
 players_url = "https://www.thesportsdb.com/api/v1/json/3/searchplayers.php"
 honours_url = "https://www.thesportsdb.com/api/v1/json/3/lookuphonours.php"
 
+
+
 def fetch_player_name(playername):
     params = {'p': playername}
     response = requests.get(players_url, params=params, timeout=10) 
@@ -23,7 +25,7 @@ def fetch_player_name(playername):
          return None, None 
 
     return exact_player_id, exact_player_name  # return the player's id and name                                                                          
-
+  
 
 
 def fetch_player_trophies(player_id):
@@ -51,22 +53,39 @@ def fetch_player_trophies(player_id):
     else:
         print("Error fetching data from the API.")
         return {} 
+
+
+
+
+
+
+
+player1_name = input("Enter Player 1 name: ")
+player2_name = input("Enter Player 2 name: ")
+
+exact_player_id1, exact_player_name1 = fetch_player_name(player1_name)
+exact_player_id2, exact_player_name2 = fetch_player_name(player2_name)
+
+exact_player_1_trophies = fetch_player_trophies(exact_player_id1)
+exact_player_2_trophies = fetch_player_trophies(exact_player_id2)   
+
+
+player_1_total_trophies = sum(exact_player_1_trophies.values() ) #basiclaly the value function just seperates the values into a list and then the sum well sums it .
+player_2_total_trophies = sum(exact_player_2_trophies.values())
+
+print(exact_player_name1, "has", player_1_total_trophies, "trophies.")
+print(exact_player_name2, "has", player_2_total_trophies, "trophies.")
+
+
+if player_1_total_trophies > player_2_total_trophies:
+    print(exact_player_name1, "has more trophies than", exact_player_name2) 
+
+elif player_1_total_trophies < player_2_total_trophies:
+    print(exact_player_name2, "has more trophies than", exact_player_name1)
     
+else:
+    print(exact_player_name1, "and", exact_player_name2, "have the same number of trophies.")
     
-
-# ----- main -----
-input_player_name = input("Please Enter the Football Player's Name: ")
-exact_player_name, exact_player_id = fetch_player_name(input_player_name) 
-
-eyd = fetch_player_trophies(exact_player_id)
-
-# sorted, simple output (alphabetical by honour name)
-for honour in sorted(eyd):  #so what happens here is eyd is the ultimate result of counting trophies so  the dictionary gets sorted by keys in alphabetical order.
-    print(honour, eyd[honour])# and then the honour is printed which is the tournament names and the eyd of honour which is basically the amount of times the tournament name is won by the player.
-
-
-
-
 
 
 
